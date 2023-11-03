@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GiMail | Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  </head>
+  <style>
+    #userText,#emailText{
+      display: none;
+    }
+  </style>
+  <body>
+    <div class="container">
+        <h2 class="mt-2">Register your account</h2>
+        <hr>
+        <form action="/register" method="post" autocomplete="off">
+            <div class="mb-3 mt-2">
+                <label for="exampleInputEmail1" class="form-label">Name</label>
+                <input name="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3 mt-2">
+              <label for="exampleInputEmail1" class="form-label">Username</label>
+              <input id= "username" name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              <label id="userText" for="exampleInputEmail1" class="form-label text-danger fw-semibold">This username is already taken! Try another.</label>
+            </div>
+            <div class="mb-3 mt-2">
+                <label for="exampleInputEmail1" class="form-label">Email</label>
+                <input id="email" name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label id="emailText" for="exampleInputEmail1" class="form-label text-danger fw-semibold">This email is already in use! Try another.</label>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Password</label>
+              <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <br><br>
+            <a href="/login" style="text-decoration: none;">Already have an account? Log-in!</a>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+    <script>
+      document.querySelector("#username")
+      .addEventListener("input",function(){
+        var that = this;
+        if(this.value.trim().length > 0){
+          axios.get(`/check-username/${this.value}`)
+          .then(function(response){
+            if(response.data === null){
+              that.style.border = "initial";
+              document.querySelector("#userText").style.display = "none";
+            }
+            else{
+              that.style.border = "2px solid red";
+              document.querySelector("#userText").style.display = "initial";
+            }
+          })
+        }
+        else{
+          that.style.border = "initial";
+          document.querySelector("#userText").style.display = "none";
+        }
+      });
+
+      document.querySelector("#email")
+      .addEventListener("input",function(){
+        var that = this;
+        if(this.value.trim().length > 0){
+          axios.get(`/check-email/${this.value}`)
+          .then(function(response){
+            if(response.data === null){
+              that.style.border = "initial";
+              document.querySelector("#emailText").style.display = "none";
+            }
+            else{
+              that.style.border = "2px solid red";
+              document.querySelector("#emailText").style.display = "initial";
+            }
+          })
+        }
+        else{
+          that.style.border = "initial";
+          document.querySelector("#emailText").style.display = "none";
+        }
+      });
+      
+    </script>
+
+  </body>
+</html>
